@@ -1,8 +1,21 @@
-import styles from "./homepage.module.css";
-import Link from "next/link";
+import CategoryList from './components/card-list/CardList';
+import Featured from './components/featured/Featured';
+import Menu from './components/menu/Menu';
+import CardList from './components/card-list/CardList';
+
+
+import styles from './homepage.module.css'
 
 export default function Home() {
-  return <Link href="/asdf">
-  <h1>asdfsadfjkagsjkdjkasdgjkhasjhkdgfjhk  jksdafjkadsjkfkj jkhlasdkhjf jkhsad fkhjaskjdfjksadfjk askfldjkls</h1>
-  KLoremmipsummsd KLoremmipsummsd oremKLoremmipsummsd  asdasfd  asdfasforemKLoremmipsummsdoremKLoremmipsummsdoremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd oremKLoremmipsummsd orem</Link>;
+  return <div className={styles.container}>
+  <Featured/>
+  <CategoryList/>
+  <div className={styles.content}>
+  <CardList/>
+  <Menu/>
+  
+
+
+  </div>
+  </div>;
 }
