@@ -1,21 +1,20 @@
-import CategoryList from './components/category-list/CategoryList';
-import Featured from './components/featured/Featured';
-import Menu from './components/menu/Menu';
-import CardList from './components/card-list/CardList';
+import styles from "./homepage.module.css";
+import Featured from "./components/featured/Featured";
+import CategoryList from "./components/category-list/CategoryList";
+import CardList from "./components/card-list/CardList";
+import Menu from "./components/menu/Menu";
 
+export default function Home({ searchParams }) {
+  const page = parseInt(searchParams.page) || 1;
 
-import styles from './homepage.module.css'
-
-export default function Home() {
-  return <div className={styles.container}>
-  <Featured/>
-  <CategoryList/>
-  <div className={styles.content}>
-  <CardList/>
-  <Menu/>
-  
-
-
-  </div>
-  </div>;
+  return (
+    <div className={styles.container}>
+      <Featured />
+      <CategoryList />
+      <div className={styles.content}>
+        <CardList page={page}/>
+        <Menu />
+      </div>
+    </div>
+  );
 }
