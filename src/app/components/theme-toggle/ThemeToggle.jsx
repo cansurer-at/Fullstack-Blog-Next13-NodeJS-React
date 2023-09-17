@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import styles from "./themetoggle.module.css";
 import Image from "next/image";
-import { ThemeContext } from "@/context/ThemeContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 
 const ThemeToggle = () => {
   const { theme, toggle } = useContext(ThemeContext);
@@ -11,18 +11,16 @@ const ThemeToggle = () => {
   console.log("theme", theme);
 
   return (
-    <div  style={
-      theme === "dark"
-        ? { backgroundColor: "#fff" }
-        : { backgroundColor: "#0f172a" }
-    } onClick={toggle} className={styles.container}>
-      <Image
-       
-        src="/moon.png"
-        alt=""
-        width={14}
-        height={14}
-      />
+    <div
+      style={
+        theme === "dark"
+          ? { backgroundColor: "#fff" }
+          : { backgroundColor: "#0f172a" }
+      }
+      onClick={toggle}
+      className={styles.container}
+    >
+      <Image src="/moon.png" alt="" width={14} height={14} />
       <div
         style={
           theme === "dark"
