@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./singlepage.module.css";
 import Image from "next/image";
 import Menu from "../components/menu/Menu";
+import Comments from '../components/comments/Comments'
 
 const SinglePage = () => {
   return (
@@ -51,6 +52,7 @@ const SinglePage = () => {
               masdfkl, kasdfglk asdfgasel ds quas eos. Uoor, cldl ractione
               kdocf.
             </p>
+            <Comments/>
           </div>
         </div>
         <Menu/>
