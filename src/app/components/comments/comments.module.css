@@ -68,3 +68,15 @@
   font-size: 18px;
   font-weight: 300;
 }
+
+.send {
+  width: 80px;
+  height: 40px;
+  background-color: #7fb881;
+  color: #fff;
+  border-radius: 10px;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+
+}
