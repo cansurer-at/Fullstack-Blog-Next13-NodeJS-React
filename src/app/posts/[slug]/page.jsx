@@ -3,6 +3,8 @@ import styles from "./singlepage.module.css";
 import Image from "next/image";
 import Menu from "../../components/menu/Menu";
 import Comments from '../../components/comments/Comments'
+import CategoryList from "../../components/category-list/CategoryList";
+
 
 const getData = async (slug) => {
   const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
@@ -21,8 +23,8 @@ const SinglePage = async ({ params }) => {
 
   const data = await getData(slug);
 
-
   return (
+    <>
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.textContainer}>
@@ -58,6 +60,7 @@ const SinglePage = async ({ params }) => {
         <Menu />
       </div>
     </div>
+    </>
   );
 };
 

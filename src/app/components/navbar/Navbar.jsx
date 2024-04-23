@@ -6,6 +6,7 @@ import ThemeToggle from "../theme-toggle/ThemeToggle";
 
 const Navbar = () => {
   return (
+    <>
     <div className={styles.container}>
       <div className={styles.social}>
         <Image src="/facebook.png" alt="facebook" width={24} height={24} />
@@ -22,6 +23,7 @@ const Navbar = () => {
         <AuthLinks />
       </div>
     </div>
+    </>
   );
 };
 

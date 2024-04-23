@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./cardlist.module.css";
 import Pagination from "../pagination/Pagination";
-import Image from "next/image";
 import Card from "../card/Card";
 
 const getData = async (page, cat) => {
@@ -22,10 +21,10 @@ const getData = async (page, cat) => {
 const CardList = async ({ page, cat }) => {
   const { posts, count } = await getData(page, cat);
 
-  const POST_PER_PAGE = 2;
+  const POST_PER_PAGE = 4; 
 
-  const hasPrev = POST_PER_PAGE * (page - 1) > 0;
-  const hasNext = POST_PER_PAGE * (page - 1) + POST_PER_PAGE < count;
+  const hasPrev = page > 1;
+  const hasNext = (page * POST_PER_PAGE) < count;
 
   return (
     <div className={styles.container}>
@@ -35,7 +34,7 @@ const CardList = async ({ page, cat }) => {
           <Card item={item} key={item._id} />
         ))}
       </div>
-      <Pagination page={page} hasPrev={hasPrev} hasNext={hasNext} />
+      <Pagination cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
     </div>
   );
 };
