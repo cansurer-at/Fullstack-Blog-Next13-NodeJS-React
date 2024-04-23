@@ -85,7 +85,7 @@ const WritePage = () => {
         desc: value,
         img: media,
         slug: slugify(title),
-        catSlug: catSlug, //If not selected, choose the general category
+        catSlug: catSlug || "coding", //If not selected, choose the general category
       }),
     }); 
 
