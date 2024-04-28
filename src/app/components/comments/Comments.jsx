@@ -35,7 +35,7 @@ const Comments = ({ postSlug }) => {
       body: JSON.stringify({ desc, postSlug }),
     });
     mutate();
-    setDesc(""); 
+    setDesc("");
   };
 
   return (
@@ -56,6 +56,7 @@ const Comments = ({ postSlug }) => {
       ) : (
         <Link href="/login">Login to write a comment</Link>
       )}
+      {console.log(data, "data")}
       <div className={styles.comments}>
         {isLoading
           ? "loading"
@@ -64,6 +65,7 @@ const Comments = ({ postSlug }) => {
                 <div className={styles.user}>
                   {item.user.image ? (
                     <Image
+                      key={item._id}
                       src={item?.user?.image}
                       width={50}
                       height={50}
@@ -75,7 +77,17 @@ const Comments = ({ postSlug }) => {
                   )}
                   <div className={styles.userInfo}>
                     <span className={styles.username}>{item?.user?.name}</span>
-                    <span className={styles.date}>01.01.2023</span>
+                    <span className={styles.date}>
+                      <span className={styles.date}>
+                        {new Date(item?.createdAt)
+                          .toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          })
+                          .replace(/\//g, ".")}
+                      </span>
+                    </span>
                   </div>
                 </div>
                 <p className={styles.desc}>{item?.desc}</p>
