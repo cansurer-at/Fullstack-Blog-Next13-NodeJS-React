@@ -1,10 +1,10 @@
-.container{
+.container {
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
-.select{
+.select {
   margin-bottom: 50px;
   padding: 10px 20px;
   margin-left: 50px;
@@ -45,7 +45,14 @@
   left: 50px;
 }
 
-.input{
+.selectNew option {
+  color: white !important;
+  /* Add any other necessary styling */
+  background-color:pink;
+  z-index: 100;
+}
+
+.input {
   padding: 50px;
   font-size: 64px;
   border: none;
@@ -54,7 +61,7 @@
   color: var(--textColor);
 }
 
-.input::placeholder{
+.input::placeholder {
   color: #b3b3b1;
 }
 
@@ -62,7 +69,7 @@
   width: 100%;
 }
 
-.publish{
+.publish {
   position: absolute;
   top: 0px;
   right: 0px;

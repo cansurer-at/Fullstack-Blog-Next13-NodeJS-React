@@ -25,6 +25,34 @@ const WritePage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [catSlug, setCatSlug] = useState("");
+  const [newCat, setNewCat] = useState(""); // State to hold new category name
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+
+  console.log('categories', categories)
+
+
+  console.log('catSlug', catSlug)
+
+  useEffect(() => {
+    // Fetch categories from your API
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(data); // Assuming your API returns an array of categories
+        } else {
+          console.error("Failed to fetch categories. Status:", res.status);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const storage = getStorage(app);
@@ -37,8 +65,7 @@ const WritePage = () => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
           switch (snapshot.state) {
             case "paused":
@@ -77,21 +104,49 @@ const WritePage = () => {
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
 
-  const handleSubmit = async () => {
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        desc: value,
-        img: media,
-        slug: slugify(title),
-        catSlug: catSlug || "coding", //If not selected, choose the general category
-      }),
-    }); 
+      const handleSubmit = async () => {
+        const res = await fetch("/api/posts", {
+          method: "POST",
+          body: JSON.stringify({
+            title,
+            desc: value,
+            img: media,
+            slug: slugify(title),
+            catSlugs: selectedCategories, // Use selectedCategories array
+          }),
+        });
+      
+        if (res.status === 200) {
+          const data = await res.json();
+          router.push(`/posts/${data.slug}`);
+        }
+      };
 
-    if (res.status === 200) {
-      const data = await res.json();
-      router.push(`/posts/${data.slug}`);
+      console.log('selectedCategories', selectedCategories)
+
+  const handleCreateCategory = async () => {
+    try {
+      // Generate slug from name
+      const slug = newCat.toLowerCase().replace(/\s+/g, "-");
+
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        body: JSON.stringify({
+          name: newCat,
+          slug: slug,
+        }),
+      });
+      if (res.status === 201) {
+        console.log("Category created successfully!");
+        setCatSlug(slug); // Set the newly created category's slug as the selected category
+        setNewCat(""); // Clear the input field
+      } else {
+        console.error("Failed to create category. Status:", res.status);
+        const data = await res.json();
+        console.error("Error message:", data.message);
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
     }
   };
 
@@ -103,14 +158,29 @@ const WritePage = () => {
         className={styles.input}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)}>
-        <option value="style">style</option>
-        <option value="fashion">fashion</option>
-        <option value="food">food</option>
-        <option value="culture">culture</option>
-        <option value="travel">travel</option>
-        <option value="coding">coding</option>
-      </select>
+      <input
+        type="text"
+        placeholder="New Category"
+        value={newCat}
+        onChange={(e) => setNewCat(e.target.value)}
+        className={styles.newCatInput}
+      />
+      <button className={styles.addButton} onClick={handleCreateCategory}>
+        Create Category
+      </button>
+      <select
+  className={styles.selectNew}
+  multiple
+  value={selectedCategories}
+  onChange={(e) => setSelectedCategories(Array.from(e.target.selectedOptions, option => option.value))}
+>
+  {categories.map((category) => (
+    <option key={category.slug} value={category.slug}>
+      {category.slug}
+    </option>
+  ))}
+</select>
+
       <div className={styles.editor}>
         <button className={styles.button} onClick={() => setOpen(!open)}>
           <Image src="/plus.png" alt="" width={16} height={16} />

@@ -2,7 +2,6 @@ import { getAuthSession } from "../../../utils/auth.js";
 import prisma from "../../../utils/connect";
 import { NextResponse } from "next/server";
 
-
 export const GET = async (req) => {
   const { searchParams } = new URL(req.url);
 
@@ -19,13 +18,6 @@ export const GET = async (req) => {
     },
   };
 
-
-
-
-
-
-  
-  
   try {
     const [posts, count] = await prisma.$transaction([
       prisma.post.findMany(query),
@@ -40,15 +32,6 @@ export const GET = async (req) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
 // CREATE A POST
 export const POST = async (req) => {
   const session = await getAuthSession();
@@ -61,11 +44,17 @@ export const POST = async (req) => {
 
   try {
     const body = await req.json();
-    const post = await prisma.post.create({
-      data: { ...body, userEmail: session.user.email },
-    });
+    const { catSlugs, ...postData } = body; // Extract catSlugs from body
 
-    return new NextResponse(JSON.stringify(post, { status: 200 }));
+    // Iterate over catSlugs and create a post for each category
+    const posts = await Promise.all(catSlugs.map(async (catSlug) => {
+      const post = await prisma.post.create({
+        data: { ...postData, catSlug, userEmail: session.user.email },
+      });
+      return post;
+    }));
+
+    return new NextResponse(JSON.stringify(posts, { status: 200 }));
   } catch (err) {
     console.log(err);
     return new NextResponse(
@@ -73,6 +62,4 @@ export const POST = async (req) => {
     );
   }
 };
-
-
 

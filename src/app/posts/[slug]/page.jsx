@@ -29,28 +29,32 @@ const SinglePage = async ({ params }) => {
           <div className={styles.textContainer}>
             <h1 className={styles.title}>{data?.title}</h1>
             <div className={styles.user}>
-              {data?.user?.image && (
-                <div className={styles.userImageContainer}>
-                  <Image
-                    src={data.user.image}
-                    alt=""
-                    fill
-                    className={styles.avatar}
-                  />
-                </div>
+              {data?.user && (
+                <>
+                  {data.user.image && (
+                    <div className={styles.userImageContainer}>
+                      <Image
+                        src={data.user.image}
+                        alt=""
+                        fill
+                        className={styles.avatar}
+                      />
+                    </div>
+                  )}
+                  <div className={styles.userTextContainer}>
+                    <span className={styles.username}>{data?.user.name}</span>
+                    <span className={styles.date}>
+                      {new Date(data?.createdAt)
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })
+                        .replace(/\//g, ".")}
+                    </span>
+                  </div>
+                </>
               )}
-              <div className={styles.userTextContainer}>
-                <span className={styles.username}>{data?.user.name}</span>
-                <span className={styles.date}>
-                  {new Date(data?.createdAt)
-                    .toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })
-                    .replace(/\//g, ".")}
-                </span>
-              </div>
             </div>
           </div>
           {data?.img && (
@@ -61,10 +65,13 @@ const SinglePage = async ({ params }) => {
         </div>
         <div className={styles.content}>
           <div className={styles.post}>
-            <div
-              className={styles.description}
-              dangerouslySetInnerHTML={{ __html: data?.desc }}
-            />
+          <div className={styles.description}>
+  {data?.desc ? (
+    <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+  ) : (
+    <p>No description available.</p>
+  )}
+</div>
             <div className={styles.comment}>
               <Comments postSlug={slug} />
             </div>

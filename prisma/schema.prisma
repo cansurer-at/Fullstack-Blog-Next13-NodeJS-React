@@ -20,8 +20,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
-  Post          Post[]
-  Comment       Comment[]
+  posts         Post[]
+  comments      Comment[]
 
   @@map("users")
 }
@@ -71,26 +71,39 @@ model VerificationRequest {
 }
 
 model Category {
-  id    String  @id @default(cuid()) @map("_id")
-  slug  String  @unique
-  title String
-  img   String?
-  Posts Post[]
+  id              String       @id @default(cuid()) @map("_id")
+  slug            String       @unique
+  title           String?
+  img             String?
+  posts           Post[]       // One-to-many relation
+  postCategories  PostCategory[] // Many-to-many relation
+}
+
+// New model for many-to-many relation between Post and Category
+model PostCategory {
+  id            String   @id @default(cuid()) @map("_id")
+  postId        String
+  post          Post     @relation(fields: [postId], references: [id])
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+
+  @@map("postCategories")
 }
 
 model Post {
-  id        String    @id @default(cuid()) @map("_id")
-  createdAt DateTime  @default(now())
-  slug      String    @unique
-  title     String
-  desc      String
-  img       String?
-  views     Int       @default(0)
-  catSlug   String
-  cat       Category  @relation(fields: [catSlug], references: [slug])
-  userEmail String
-  user      User      @relation(fields: [userEmail], references: [email])
-  comments  Comment[]
+  id              String         @id @default(cuid()) @map("_id")
+  createdAt       DateTime       @default(now())
+  slug            String         @unique
+  title           String
+  desc            String
+  img             String?
+  views           Int            @default(0)
+  catSlug         String
+  cat             Category       @relation(fields: [catSlug], references: [slug]) // Rename relation to `cat`
+  userEmail       String
+  user            User           @relation(fields: [userEmail], references: [email])
+  comments        Comment[]
+  postCategories  PostCategory[] // Many-to-many relation
 }
 
 model Comment {
