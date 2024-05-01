@@ -118,38 +118,41 @@ const WritePage = () => {
       
         if (res.status === 200) {
           const data = await res.json();
-          router.push(`/posts/${data.slug}`);
+          console.log('data', data)
+          router.push(`/posts/${data[0].slug}`);
         }
       };
 
       console.log('selectedCategories', selectedCategories)
 
-  const handleCreateCategory = async () => {
-    try {
-      // Generate slug from name
-      const slug = newCat.toLowerCase().replace(/\s+/g, "-");
-
-      const res = await fetch("/api/categories", {
-        method: "POST",
-        body: JSON.stringify({
-          name: newCat,
-          slug: slug,
-        }),
-      });
-      if (res.status === 201) {
-        console.log("Category created successfully!");
-        setCatSlug(slug); // Set the newly created category's slug as the selected category
-        setNewCat(""); // Clear the input field
-      } else {
-        console.error("Failed to create category. Status:", res.status);
-        const data = await res.json();
-        console.error("Error message:", data.message);
-      }
-    } catch (error) {
-      console.error("Error creating category:", error);
-    }
-  };
-
+      const handleCreateCategory = async () => {
+        try {
+          // Generate slug from name
+          const slug = newCat.toLowerCase().replace(/\s+/g, "-");
+      
+          const res = await fetch("/api/categories", {
+            method: "POST",
+            body: JSON.stringify({
+              name: newCat,
+              slug: slug,
+            }),
+          });
+          if (res.status === 201) {
+            console.log("Category created successfully!");
+            // Update categories state with the newly created category
+            setCategories(prevCategories => [...prevCategories, { name: newCat, slug: slug }]);
+            setCatSlug(slug); // Set the newly created category's slug as the selected category
+            setNewCat(""); // Clear the input field
+          } else {
+            console.error("Failed to create category. Status:", res.status);
+            const data = await res.json();
+            console.error("Error message:", data.message);
+          }
+        } catch (error) {
+          console.error("Error creating category:", error);
+        }
+      };
+      
   return (
     <div className={styles.container}>
       <input
