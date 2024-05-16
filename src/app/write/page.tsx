@@ -30,10 +30,8 @@ const WritePage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
 
-  console.log('categories', categories)
 
 
-  console.log('catSlug', catSlug)
 
   useEffect(() => {
     // Fetch categories from your API

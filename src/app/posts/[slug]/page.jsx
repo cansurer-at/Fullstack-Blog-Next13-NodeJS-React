@@ -24,6 +24,7 @@ const SinglePage = async ({ params }) => {
 
   return (
     <>
+      <CategoryList />
       <div className={styles.container}>
         <div className={styles.infoContainer}>
           <div className={styles.textContainer}>
@@ -65,13 +66,13 @@ const SinglePage = async ({ params }) => {
         </div>
         <div className={styles.content}>
           <div className={styles.post}>
-          <div className={styles.description}>
-  {data?.desc ? (
-    <div dangerouslySetInnerHTML={{ __html: data.desc }} />
-  ) : (
-    <p>No description available.</p>
-  )}
-</div>
+            <div className={styles.description}>
+              {data?.desc ? (
+                <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+              ) : (
+                <p>No description available.</p>
+              )}
+            </div>
             <div className={styles.comment}>
               <Comments postSlug={slug} />
             </div>

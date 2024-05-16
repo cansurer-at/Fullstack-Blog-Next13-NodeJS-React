@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./categorylist.module.css";
 import Link from "next/link";
-import Image from "next/image";
 
 const getData = async () => {
   try {
@@ -22,9 +21,13 @@ const getData = async () => {
   }
 };
 
+
+
 const CategoryList = async () => {
   try {
     const data = await getData();
+console.log('data', data)
+
 
     if (!Array.isArray(data)) {
       throw new Error("Data is not an array");

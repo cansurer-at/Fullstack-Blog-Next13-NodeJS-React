@@ -75,6 +75,7 @@ model Category {
   slug            String       @unique
   title           String?
   img             String?
+  views           Int            @default(0)
   posts           Post[]       // One-to-many relation
   postCategories  PostCategory[] // Many-to-many relation
 }
