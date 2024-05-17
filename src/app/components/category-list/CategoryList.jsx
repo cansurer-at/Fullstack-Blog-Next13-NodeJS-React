@@ -13,7 +13,6 @@ const getData = async () => {
     }
 
     const data = await res.json();
-    console.log(data); // Log data to server console
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -21,13 +20,9 @@ const getData = async () => {
   }
 };
 
-
-
 const CategoryList = async () => {
   try {
     const data = await getData();
-console.log('data', data)
-
 
     if (!Array.isArray(data)) {
       throw new Error("Data is not an array");
@@ -35,7 +30,6 @@ console.log('data', data)
 
     return (
       <div className={styles.container}>
-        <h1 className={styles.title}>Popular Categories</h1>
         <div className={styles.categories}>
           {data.map((item) => (
             <Link

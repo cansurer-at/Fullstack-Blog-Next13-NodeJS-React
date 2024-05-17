@@ -56,7 +56,6 @@ const Comments = ({ postSlug }) => {
       ) : (
         <Link href="/login">Login to write a comment</Link>
       )}
-      {console.log(data, "data")}
       <div className={styles.comments}>
         {isLoading
           ? "loading"

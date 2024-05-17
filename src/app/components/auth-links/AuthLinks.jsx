@@ -8,6 +8,7 @@ const AuthLinks = () => {
   const [open, setOpen] = useState(false);
 
   const { status } = useSession();
+  
 
   return (
     <>
@@ -35,8 +36,8 @@ const AuthLinks = () => {
           <Link href="/">Homepage</Link>
           <Link href="/">About</Link>
           <Link href="/">Contact</Link>
-          {status === "notauthenticated" ? (
-            <Link href="/login">Login</Link>
+          {status === "unauthenticated" ? (
+            <Link onClick={()=>setOpen(!open)} href="/login">Login</Link>
           ) : (
             <>
               <Link href="/write">Write</Link>
