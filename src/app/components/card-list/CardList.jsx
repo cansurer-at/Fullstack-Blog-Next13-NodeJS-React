@@ -26,9 +26,9 @@ const CardList = async ({ page, cat }) => {
   const hasPrev = page > 1;
   const hasNext = page * POST_PER_PAGE < count;
   const uniqueTitles = new Set();
-
+  console.log("posts", posts);
   // Sort posts based on the id field (assuming id is a number)
-  posts.sort((a, b) => a.id - b.id);
+  posts?.sort((a, b) => a.id - b.id);
 
   return (
     <div className={styles.container}>

@@ -1,14 +1,25 @@
-"use client";
+"use client"
 import Link from "next/link";
 import styles from "./authLinks.module.css";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 const AuthLinks = () => {
+  const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
-
   const { status } = useSession();
-  
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const session = await getSession();
+      if (session) {
+        setUser(session.user);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <>
@@ -18,9 +29,11 @@ const AuthLinks = () => {
         </Link>
       ) : (
         <>
-          <Link href="/write" className={styles.link}>
-            Write
-          </Link>
+          {user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+            <Link href="/write" className={styles.link}>
+              Write
+            </Link>
+          )}
           <span className={styles.link} onClick={signOut}>
             Logout
           </span>
@@ -37,10 +50,14 @@ const AuthLinks = () => {
           <Link href="/">About</Link>
           <Link href="/">Contact</Link>
           {status === "unauthenticated" ? (
-            <Link onClick={()=>setOpen(!open)} href="/login">Login</Link>
+            <Link onClick={() => setOpen(!open)} href="/login">
+              Login
+            </Link>
           ) : (
             <>
-              <Link href="/write">Write</Link>
+              {user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+                <Link href="/write">Write</Link>
+              )}
               <span className={styles.link}>Logout</span>
             </>
           )}
