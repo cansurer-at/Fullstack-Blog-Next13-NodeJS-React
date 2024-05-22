@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./singlepage.module.css";
 import Image from "next/image";
-import Menu from "../../components/menu/Menu";
 import Comments from "../../components/comments/Comments";
 import CategoryList from "../../components/category-list/CategoryList";
 

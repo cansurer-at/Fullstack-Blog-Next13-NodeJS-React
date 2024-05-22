@@ -21,31 +21,19 @@ const getData = async (page, cat) => {
 const CardList = async ({ page, cat }) => {
   const { posts, count } = await getData(page, cat);
 
-  const POST_PER_PAGE = 8;
+  const POST_PER_PAGE = 10;
 
   const hasPrev = page > 1;
   const hasNext = page * POST_PER_PAGE < count;
-  const uniqueTitles = new Set();
   console.log("posts", posts);
-  // Sort posts based on the id field (assuming id is a number)
-  posts?.sort((a, b) => a.id - b.id);
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Recent Posts</h1>
       <div className={styles.posts}>
-        {posts
-          ?.filter((item) => item.title)
-          .reduce((uniquePosts, item) => {
-            if (!uniqueTitles.has(item.title)) {
-              uniqueTitles.add(item.title);
-              uniquePosts.push(item);
-            }
-            return uniquePosts;
-          }, [])
-          .map((item) => (
-            <Card item={item} key={item.id} />
-          ))}
+        {posts.map((item) => (
+          <Card item={item} key={item.id} />
+        ))}
       </div>
       <Pagination cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
     </div>

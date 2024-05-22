@@ -116,9 +116,10 @@ const WritePage = () => {
       
         if (res.status === 200) {
           const data = await res.json();
-          router.push(`/posts/${data[0].slug}`);
+          router.push(`/posts/${data.slug}`); // Update to use single post data
         }
       };
+      
 
       console.log('selectedCategories', selectedCategories)
 
