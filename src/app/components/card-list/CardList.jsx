@@ -1,7 +1,5 @@
 import React from "react";
-import styles from "./cardlist.module.css";
-import Pagination from "../pagination/Pagination";
-import Card from "../card/Card";
+import ClientCardList from "./ClientCardList";
 
 const getData = async (page, cat) => {
   const res = await fetch(
@@ -12,7 +10,7 @@ const getData = async (page, cat) => {
   );
 
   if (!res.ok) {
-    throw new Error("Failed");
+    throw new Error("Failed to fetch data");
   }
 
   return res.json();
@@ -20,23 +18,8 @@ const getData = async (page, cat) => {
 
 const CardList = async ({ page, cat }) => {
   const { posts, count } = await getData(page, cat);
-
-  const POST_PER_PAGE = 10;
-
-  const hasPrev = page > 1;
-  const hasNext = page * POST_PER_PAGE < count;
-  console.log("posts", posts);
-
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Recent Posts</h1>
-      <div className={styles.posts}>
-        {posts.map((item) => (
-          <Card item={item} key={item.id} />
-        ))}
-      </div>
-      <Pagination cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
-    </div>
+    <ClientCardList  initialData={{ posts, count }} page={page} cat={cat} />
   );
 };
 

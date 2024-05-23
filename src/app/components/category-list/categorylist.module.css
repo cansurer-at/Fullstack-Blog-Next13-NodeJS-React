@@ -1,4 +1,3 @@
-
 .title {
   margin: 50px 0px;
 }
@@ -19,50 +18,6 @@
   height: 40px;
   justify-content: center;
   border-radius: 10px;
-}
-
-.category.react   {
-  background-color: #57c4ff31;
-}
-
-.category.docker   {
-  background-color: #57c4ff31;
-}
-.category.typescript   {
-  background-color: #57c4ff31;
-}
-
-
-
-.category.frontend-development {
-  background-color: #da85c731;
-}
-
-.category.node-js {
-  background-color: #7fb88133;
-}
-
-.category.mongo-db {
-  background-color: #7fb88133;
-}
-
-.category.sql {
-  background-color: #ff795736;
-}
-.category.tech-news {
-  background-color: #ff795736;
-}
-
-.category.css {
-  background-color: #ffb04f45;
-}
-
-.category.backend-development {
-  background-color: #ff795736;
-}
-
-.category.javascript {
-  background-color: #5e4fff31;
 }
 
 .image {
