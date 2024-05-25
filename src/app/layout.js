@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ThemeContextProvider>
             <ThemeProvider>
-                  <UserProfile />
+              <UserProfile />
 
               <div className="container">
                 <div className="wrapper">

@@ -1,9 +1,9 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -35,26 +35,33 @@ const UserProfile = () => {
     };
   }, []);
 
-  if (!user) {
-    return <div></div>;
-  }
-
   const containerStyle = {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
     gap: "10px",
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     color: "#fff",
-    paddingRight: "80px",
-    paddingLeft: "80px",
+    paddingRight: "40px",
+    paddingLeft: "40px",
     height: "40px",
   };
-  
+
+  // Check if user exists
+  if (!user) {
+    return (
+      <div style={containerStyle}>
+        <p style={{ fontSize: "10px", alignItems: "center", display: "flex" }}>
+          Welcome, <Link href="/login"><span style={{"fontWeight":"bold", padding:"5px"}}>login </span></Link> to write comment
+        </p>
+      </div>
+    );
+  }
+
   // Add media query for screens below 500px width
-  if (window.matchMedia("(max-width: 500px)").matches) {
-    containerStyle.paddingRight = "40px"; 
-    containerStyle.paddingLeft = "40px"; 
+  if (screenWidth && screenWidth <= 500) {
+    containerStyle.paddingRight = "40px";
+    containerStyle.paddingLeft = "40px";
   }
 
   const imageStyle = {
@@ -85,8 +92,8 @@ const UserProfile = () => {
           borderRadius: "5px",
           cursor: "pointer",
           transition: "background-color 0.3s, box-shadow 0.3s",
-          fontSize:"12px",
-          fontWeight:"bold"
+          fontSize: "12px",
+          fontWeight: "bold",
         }}
       >
         Logout
