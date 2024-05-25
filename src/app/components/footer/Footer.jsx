@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
         <div className={styles.list}>
           <span className={styles.listTitle}>Useful links</span>
-          <Link href="/">Sitemap</Link>
+          <Link href="/sitemap">Sitemap</Link>
           {/* <Link href="/">Instagram</Link>
           <Link href="/">Tiktok</Link>
           <Link href="/">Youtube</Link> */}
