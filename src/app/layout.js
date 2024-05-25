@@ -5,6 +5,7 @@ import Footer from "./components/footer/Footer";
 import { ThemeContextProvider } from "../context/ThemeContext";
 import ThemeProvider from "../providers/ThemeProvider";
 import AuthProvider from "../providers/AuthProvider";
+import UserProfile from "./components/user-profile/UserProfile";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +17,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
       <body className={inter.className}>
         <AuthProvider>
           <ThemeContextProvider>
             <ThemeProvider>
+                  <UserProfile />
+
               <div className="container">
                 <div className="wrapper">
                   <Navbar />

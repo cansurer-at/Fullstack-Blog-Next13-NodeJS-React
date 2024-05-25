@@ -34,9 +34,7 @@ const AuthLinks = () => {
               Write
             </Link>
           )}
-          <span className={styles.link} onClick={signOut}>
-            Logout
-          </span>
+         
         </>
       )}
       <div className={styles.burger} onClick={() => setOpen(!open)}>

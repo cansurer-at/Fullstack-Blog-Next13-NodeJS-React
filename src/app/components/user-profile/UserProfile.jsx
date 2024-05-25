@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -39,14 +40,26 @@ const UserProfile = () => {
   }
 
   const containerStyle = {
-    display: screenWidth < 1040 ? 'none' : 'flex',
-    alignItems: 'center',
-    gap: '10px'
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    gap: "10px",
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    color: "#fff",
+    paddingRight: "80px",
+    paddingLeft: "80px",
+    height: "40px",
   };
+  
+  // Add media query for screens below 500px width
+  if (window.matchMedia("(max-width: 500px)").matches) {
+    containerStyle.paddingRight = "40px"; 
+    containerStyle.paddingLeft = "40px"; 
+  }
 
   const imageStyle = {
-    borderRadius: '50%',
-    objectFit: 'cover'
+    borderRadius: "50%",
+    objectFit: "cover",
   };
 
   return (
@@ -54,12 +67,30 @@ const UserProfile = () => {
       <Image
         key={user._id}
         src={user?.image}
-        width={50}
-        height={50}
+        width={20}
+        height={20}
         alt={user.name}
         style={imageStyle}
       />
       <h6>Welcome, {user.name}!</h6>
+      <button
+        onClick={signOut}
+        style={{
+          backgroundColor: "black",
+          color: "#fff",
+          width: "70px",
+          height: "30px",
+          padding: "2px 5px",
+          border: "1px solid #fff",
+          borderRadius: "5px",
+          cursor: "pointer",
+          transition: "background-color 0.3s, box-shadow 0.3s",
+          fontSize:"12px",
+          fontWeight:"bold"
+        }}
+      >
+        Logout
+      </button>
     </div>
   );
 };
