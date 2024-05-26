@@ -36,6 +36,8 @@ const ClientCardList = ({ initialData, page, cat }) => {
     fetchData();
   }, [page, cat]);
 
+  console.log('cat', cat)
+
   const { posts, count } = data;
   const POST_PER_PAGE = 10;
   const hasPrev = page > 1;
@@ -43,7 +45,7 @@ const ClientCardList = ({ initialData, page, cat }) => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Recent Posts</h1>
+      <h1 className={styles.title}>{cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : ""} Recent Blogs</h1>
       <div className={styles.posts}>
         {loading
           ? Array.from({ length: POST_PER_PAGE }).map((_, index) => (

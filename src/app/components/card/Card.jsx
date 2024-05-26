@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Image from "next/image";
 import styles from "./card.module.css";
@@ -24,36 +24,46 @@ const Card = ({ item }) => {
   return (
     <div className={styles.container}>
       {item.img && (
-        <div className={styles.imageContainer}>
-          <Image
-            src={item.img}
-            alt={item.title}
-            layout="fill"
-            className={styles.image}
-            loading="lazy"
-          />
-        </div>
+        <Link href={`/posts/${item.slug}`}>
+          <div className={styles.imageContainer}>
+            <Image
+              src={item.img}
+              alt={item.title}
+              layout="fill"
+              className={styles.image}
+              loading="lazy"
+            />
+          </div>
+        </Link>
       )}
       <div className={styles.textContainer}>
         <div className={styles.detail}>
           <span className={styles.date}>
             {item.createdAt.substring(0, 10)}{" "}
           </span>
-          <span className={styles.category}>{item.catSlug}</span>
+          <div className={styles.categories}>
+            {item.catSlug.split(',').map((cat) => (
+              <Link key={cat.trim()} href={`/blog?cat=${cat.trim()}`}>
+                <span className={styles.category}>{cat.trim()}</span>
+              </Link>
+            ))}
+          </div>
         </div>
         <Link href={`/posts/${item.slug}`}>
           <h1 className={styles.title}>{item.title}</h1>
         </Link>
         {item.desc && (
-          <div
-            className={styles.description}
-            dangerouslySetInnerHTML={{
-              __html: truncateDescription(item.desc, 200),
-            }}
-          />
+          <Link href={`/posts/${item.slug}`}>
+            <div
+              className={styles.description}
+              dangerouslySetInnerHTML={{
+                __html: truncateDescription(item.desc, 200),
+              }}
+            />
+          </Link>
         )}
         <Link href={`/posts/${item.slug}`} className={styles.link}>
-          Read More ({calculateReadingTime(item.desc)} min)
+          Read more ({calculateReadingTime(item.desc)} min)
         </Link>
       </div>
     </div>

@@ -52,7 +52,7 @@ const UserProfile = () => {
     return (
       <div style={containerStyle}>
         <p style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
-          Welcome, <Link href="/login"><span style={{"fontWeight":"bold", padding:"5px"}}>login </span></Link> to write comment
+          Welcome, <Link href="/login"><span style={{"fontWeight":"bold", padding:"5px", textDecoration: "underline"}}>login </span></Link> to write comment
         </p>
       </div>
     );
@@ -60,8 +60,8 @@ const UserProfile = () => {
 
   // Add media query for screens below 500px width
   if (screenWidth && screenWidth <= 500) {
-    containerStyle.paddingRight = "40px";
-    containerStyle.paddingLeft = "40px";
+    containerStyle.paddingRight = "20px";
+    containerStyle.paddingLeft = "20px";
   }
 
   const imageStyle = {
