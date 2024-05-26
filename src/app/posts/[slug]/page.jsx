@@ -3,6 +3,7 @@ import styles from "./singlepage.module.css";
 import Image from "next/image";
 import Comments from "../../components/comments/Comments";
 import CategoryList from "../../components/category-list/CategoryList";
+import Footer from "../../components/footer/Footer";
 
 const getData = async (slug) => {
   const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
@@ -67,7 +68,7 @@ const SinglePage = async ({ params }) => {
           <div className={styles.post}>
             <div className={styles.description}>
               {data?.desc ? (
-                <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+                <div className='ql-editor' dangerouslySetInnerHTML={{ __html: data.desc }}/> 
               ) : (
                 <p>No description available.</p>
               )}
@@ -76,7 +77,6 @@ const SinglePage = async ({ params }) => {
               <Comments postSlug={slug} />
             </div>
           </div>
-          {/* <Menu /> */}
         </div>
       </div>
     </>

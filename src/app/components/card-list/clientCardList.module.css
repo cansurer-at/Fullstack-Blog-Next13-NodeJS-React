@@ -10,7 +10,7 @@
 .title {
   margin: 50px 0;
   font-size: 32px;
-  color: #333;
+  color: var(textColor);
   text-align: center;
 }
 

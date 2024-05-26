@@ -1,3 +1,5 @@
+/* singlepage.module.css */
+
 .infoContainer {
   display: flex;
   align-items: center;
@@ -51,16 +53,27 @@
 
 .image {
   object-fit: cover;
+  border-radius: 8px;
 }
 
 .content {
   display: flex;
   gap: 50px;
+  flex-direction: column; /* Stack content vertically on smaller screens */
 }
 
 .post {
-  flex: 5;
+  flex: 1; /* Ensure the post takes full width on small screens */
   margin-top: 60px;
+}
+
+.description {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  min-height: 100vh; /* Limit the maximum height and allow vertical scroll if exceeded */
+  padding: 10px; /* Add padding for better readability */
+  box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
 }
 
 .description p {
@@ -69,27 +82,56 @@
   margin-bottom: 20px;
 }
 
+.comment {
+  margin-top: 20px;
+}
+
 @media screen and (max-width: 1536px) {
   .title {
     font-size: 54px;
   }
 }
+
 @media screen and (max-width: 1280px) {
   .title {
     font-size: 48px;
   }
 }
+
 @media screen and (max-width: 1024px) {
   .imageContainer {
     display: none;
   }
 }
+
 @media screen and (max-width: 640px) {
   .title {
     font-size: 36px;
   }
 
-  .description p{
+  .description p {
     font-size: 18px;
   }
+
+  .infoContainer {
+    flex-direction: column;
+    align-items: flex-start; /* Adjust alignment for better stacking */
+    gap: 20px; /* Reduce gap on smaller screens */
+  }
+
+  .content {
+    gap: 20px; /* Reduce gap on smaller screens */
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .description {
+    max-width: 80%; /* Limit the width of the description on smaller screens */
+  }
+}
+
+/* Additional CSS for handling code snippets */
+.code-container {
+  max-width: 100%;
+  overflow-x: auto;
 }
