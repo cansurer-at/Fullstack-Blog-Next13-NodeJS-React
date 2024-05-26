@@ -38,6 +38,9 @@
   }
 }
 @media screen and (max-width: 768px) {
+  
+}
+ @media screen and (max-width: 640px) {
   .categories {
     display: flex;
     gap: 10px;
@@ -60,7 +63,5 @@
     display: flex;
     flex-direction: row;
   }
-}
-/* @media screen and (max-width: 640px) {
   
-} */
+} 

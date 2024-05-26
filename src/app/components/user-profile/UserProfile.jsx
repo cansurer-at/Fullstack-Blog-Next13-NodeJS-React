@@ -51,7 +51,7 @@ const UserProfile = () => {
   if (!user) {
     return (
       <div style={containerStyle}>
-        <p style={{ fontSize: "10px", alignItems: "center", display: "flex" }}>
+        <p style={{ fontSize: "12px", alignItems: "center", display: "flex" }}>
           Welcome, <Link href="/login"><span style={{"fontWeight":"bold", padding:"5px"}}>login </span></Link> to write comment
         </p>
       </div>
