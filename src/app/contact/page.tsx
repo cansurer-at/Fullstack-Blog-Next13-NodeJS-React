@@ -1,5 +1,5 @@
 import React from "react";
-import UnderConst from "../components/under-cons/underCons";
+import UnderConst from "../components/undercons/UnderCons";
 
 const Page = () => {
   return <UnderConst />;
