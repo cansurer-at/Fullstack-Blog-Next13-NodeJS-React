@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import styles from "./authLinks.module.css";
+import styles from "./authlinks.module.css";
 import { signOut, useSession } from "next-auth/react";
 import { getSession } from "next-auth/react";
 
