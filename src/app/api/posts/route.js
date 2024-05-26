@@ -8,7 +8,7 @@ export const GET = async (req) => {
   const page = parseInt(searchParams.get("page") || "1");
   const cat = searchParams.get("cat");
 
-  const POST_PER_PAGE = 10;
+  const POST_PER_PAGE = 2;
 
   let query = {
     take: POST_PER_PAGE,
@@ -28,7 +28,22 @@ export const GET = async (req) => {
       prisma.post.findMany(query),
       prisma.post.count({ where: query.where }),
     ]);
-    return new NextResponse(JSON.stringify({ posts, count }), { status: 200 });
+
+    const categoryCounts = {}; // Object to store counts for each category
+    if (!cat) {
+      const categories = await prisma.category.findMany();
+      for (const category of categories) {
+        const catQuery = { ...query, where: { ...query.where, catSlug: category.slug } };
+        const catCount = await prisma.post.count({ where: catQuery.where });
+        categoryCounts[category.slug] = catCount;
+      }
+    } else {
+      const catQuery = { ...query, where: { ...query.where } };
+      const catCount = await prisma.post.count({ where: catQuery.where });
+      categoryCounts[cat] = catCount;
+    }
+
+    return new NextResponse(JSON.stringify({ posts, count, categoryCounts }), { status: 200 });
   } catch (err) {
     console.log(err);
     return new NextResponse(
@@ -68,4 +83,3 @@ export const POST = async (req) => {
     );
   }
 };
-

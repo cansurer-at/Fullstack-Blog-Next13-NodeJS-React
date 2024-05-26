@@ -25,6 +25,8 @@ const ClientCardList = ({ initialData, page, cat }) => {
     return res.json();
   };
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -36,12 +38,13 @@ const ClientCardList = ({ initialData, page, cat }) => {
     fetchData();
   }, [page, cat]);
 
-  console.log('cat', cat)
 
   const { posts, count } = data;
-  const POST_PER_PAGE = 10;
+  const POST_PER_PAGE = 2;
   const hasPrev = page > 1;
   const hasNext = page * POST_PER_PAGE < count;
+
+
 
   return (
     <div className={styles.container}>
@@ -53,7 +56,7 @@ const ClientCardList = ({ initialData, page, cat }) => {
             ))
           : posts.map((item) => <Card item={item} key={item.id} />)}
       </div>
-      <Pagination cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
+      <Pagination totalPages={initialData?.count / 2} cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
     </div>
   );
 };

@@ -1,18 +1,49 @@
 .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; /* Add some top margin for spacing */
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
 }
 
 .button {
-  width: 100px;
+  width: 40px;
+  height: 40px;
   border: none;
-  padding: 16px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
   background-color: crimson;
   color: white;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.button:disabled{
+.button:hover {
+  background-color: darkred;
+}
+
+.button:disabled {
   background-color: rgba(220, 20, 60, 0.473);
+  color: rgba(255, 255, 255, 0.5);
   cursor: not-allowed;
+}
+
+.pageNumber {
+  padding: 8px 12px; /* Add some padding for better appearance */
+  margin: 0 5px;
+  border-radius: 5px; /* Add border-radius to make it more button-like */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Add transition for smoother hover effect */
+}
+
+.pageNumber:hover {
+  background-color: crimson;
+  color: white;
 }
