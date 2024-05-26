@@ -20,14 +20,20 @@ const getData = async () => {
   }
 };
 
-// Function to generate random color
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color + '31'; // Adding transparency
+// Predefined colors
+const colors = [
+  '#FF5733', // Red
+  '#33FF57', // Green
+  '#3357FF', // Blue
+  '#FF33A1', // Pink
+  '#F3FF33', // Yellow
+  '#33FFF1', // Cyan
+  '#8A33FF', // Purple
+];
+
+// Function to get a specific color from the predefined list
+const getColor = (index) => {
+  return colors[index % colors.length] + '31'; // Adding transparency
 };
 
 const CategoryList = async () => {
@@ -41,12 +47,12 @@ const CategoryList = async () => {
     return (
       <div className={styles.container}>
         <div className={styles.categories}>
-          {data.map((item) => (
+          {data.map((item, index) => (
             <Link
               key={item._id}
               className={styles.category}
               href={`/blog?cat=${item.slug}`}
-              style={{ backgroundColor: getRandomColor() }}
+              style={{ backgroundColor: getColor(index) }}
             >
               {item.slug}
             </Link>

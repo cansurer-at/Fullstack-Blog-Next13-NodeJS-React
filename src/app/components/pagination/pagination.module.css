@@ -47,3 +47,9 @@
   background-color: crimson;
   color: white;
 }
+
+.active {
+  background-color: darkred; /* Highlight the active page number */
+  color: white;
+  border: 2px solid crimson; /* Add a border to the active page number */
+}

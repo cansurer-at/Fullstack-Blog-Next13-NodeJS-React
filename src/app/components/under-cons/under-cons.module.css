@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 40px;
+  border-radius: 5px;
+}
+
+.crane {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.cable {
+  width: 4px;
+  height: 60px;
+  background-color: #333;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: moveCable 1s infinite;
+}
+
+.hook {
+  width: 20px;
+  height: 20px;
+  background-color: #333;
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+}
+
+.message {
+  margin-top: 20px;
+}
+
+@keyframes moveCable {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 20px;
+  }
+  
+}
+
+.text { 
+  margin-top:25px;
+}

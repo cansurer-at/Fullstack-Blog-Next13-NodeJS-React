@@ -56,7 +56,7 @@ const ClientCardList = ({ initialData, page, cat }) => {
             ))
           : posts.map((item) => <Card item={item} key={item.id} />)}
       </div>
-      <Pagination totalPages={initialData?.count / 2} cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
+      <Pagination data={initialData} totalPages={initialData?.count / 2} cat={cat} page={page} hasPrev={hasPrev} hasNext={hasNext} />
     </div>
   );
 };
