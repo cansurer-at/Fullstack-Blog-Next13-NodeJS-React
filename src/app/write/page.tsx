@@ -1,43 +1,39 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./writepage.module.css";
+import dynamic from "next/dynamic"; // Dynamic import for ReactQuill
+import { useRouter } from "next/navigation"; // Corrected import
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { app } from "../../utils/firebase";
+import { useSession } from "next-auth/react";
+
 import "react-quill/dist/quill.bubble.css";
 
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { app } from "../../utils/firebase";
-import ReactQuill from "react-quill";
+// Ensure ReactQuill is only imported on the client-side
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const WritePage = () => {
   const { status } = useSession();
+
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [media, setMedia] = useState("");
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
-  const [catSlug, setCatSlug] = useState("");
   const [newCat, setNewCat] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
-    // Fetch categories from your API
     const fetchCategories = async () => {
       try {
         const res = await fetch("/api/categories");
         if (res.ok) {
           const data = await res.json();
-          setCategories(data); // Assuming your API returns an array of categories
+          setCategories(data);
         } else {
           console.error("Failed to fetch categories. Status:", res.status);
         }
@@ -49,8 +45,10 @@ const WritePage = () => {
     fetchCategories();
   }, []);
 
+  
+
   useEffect(() => {
-    if (file) {
+    if (typeof window !== "undefined" && file) {
       const storage = getStorage(app);
       const upload = () => {
         const name = new Date().getTime() + file.name;
@@ -61,8 +59,7 @@ const WritePage = () => {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log("Upload is " + progress + "% done");
             switch (snapshot.state) {
               case "paused":
@@ -73,7 +70,9 @@ const WritePage = () => {
                 break;
             }
           },
-          (error) => {},
+          (error) => {
+            console.error("Upload error:", error);
+          },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               setMedia(downloadURL);
@@ -112,6 +111,17 @@ const WritePage = () => {
     }
   };
 
+  if (status === "loading") {
+    return <div className={styles.loading}>Loading...</div>;
+  }
+
+  if (status === "unauthenticated") {
+    if (typeof window !== "undefined") {
+      router.push("/");
+    }
+    return null;
+  }
+
   const handleCreateCategory = async () => {
     try {
       const slug = newCat.toLowerCase().replace(/\s+/g, "-");
@@ -129,7 +139,6 @@ const WritePage = () => {
           ...prevCategories,
           { name: newCat, slug: slug },
         ]);
-        setCatSlug(slug);
         setNewCat("");
       } else {
         console.error("Failed to create category. Status:", res.status);
