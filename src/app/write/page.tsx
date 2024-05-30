@@ -32,61 +32,57 @@ const WritePage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Fetch categories from your API
-      const fetchCategories = async () => {
-        try {
-          const res = await fetch("/api/categories");
-          if (res.ok) {
-            const data = await res.json();
-            setCategories(data); // Assuming your API returns an array of categories
-          } else {
-            console.error("Failed to fetch categories. Status:", res.status);
-          }
-        } catch (error) {
-          console.error("Error fetching categories:", error);
+    // Fetch categories from your API
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(data); // Assuming your API returns an array of categories
+        } else {
+          console.error("Failed to fetch categories. Status:", res.status);
         }
-      };
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
-      fetchCategories();
-    }
+    fetchCategories();
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && file) {
-      const storage = getStorage(app);
-      const upload = () => {
-        const name = new Date().getTime() + file.name;
-        const storageRef = ref(storage, name);
+    const storage = getStorage(app);
+    const upload = () => {
+      const name = new Date().getTime() + file.name;
+      const storageRef = ref(storage, name);
 
-        const uploadTask = uploadBytesResumable(storageRef, file);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-            switch (snapshot.state) {
-              case "paused":
-                console.log("Upload is paused");
-                break;
-              case "running":
-                console.log("Upload is running");
-                break;
-            }
-          },
-          (error) => {},
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setMedia(downloadURL);
-            });
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
           }
-        );
-      };
+        },
+        (error) => {},
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setMedia(downloadURL);
+          });
+        }
+      );
+    };
 
-      upload();
-    }
+    upload();
   }, [file]);
 
   if (status === "loading") {
