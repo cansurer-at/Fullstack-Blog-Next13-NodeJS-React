@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./writepage.module.css";
 import { useEffect, useState } from "react";
-import "react-quill/dist/quill.bubble.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
@@ -33,26 +32,28 @@ const WritePage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
-    // Fetch categories from your API
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("/api/categories");
-        if (res.ok) {
-          const data = await res.json();
-          setCategories(data); // Assuming your API returns an array of categories
-        } else {
-          console.error("Failed to fetch categories. Status:", res.status);
+    if (typeof window !== "undefined") {
+      // Fetch categories from your API
+      const fetchCategories = async () => {
+        try {
+          const res = await fetch("/api/categories");
+          if (res.ok) {
+            const data = await res.json();
+            setCategories(data); // Assuming your API returns an array of categories
+          } else {
+            console.error("Failed to fetch categories. Status:", res.status);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
         }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+      };
 
-    fetchCategories();
+      fetchCategories();
+    }
   }, []);
 
   useEffect(() => {
-    if (file) {
+    if (typeof window !== "undefined" && file) {
       const storage = getStorage(app);
       const upload = () => {
         const name = new Date().getTime() + file.name;
