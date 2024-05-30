@@ -1,6 +1,6 @@
 "use client";
 
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./writepage.module.css";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import {
 import { app } from "../../utils/firebase";
 
 // Dynamically import ReactQuill to ensure it's only loaded on the client side
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const WritePage = () => {
   const { status } = useSession();
@@ -63,7 +63,8 @@ const WritePage = () => {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log("Upload is " + progress + "% done");
             switch (snapshot.state) {
               case "paused":
@@ -92,10 +93,7 @@ const WritePage = () => {
   }
 
   if (status === "unauthenticated") {
-    if (typeof window !== "undefined") {
-      router.push("/");
-    }
-    return null;
+    router.push("/");
   }
 
   const slugify = (str) =>
@@ -139,7 +137,10 @@ const WritePage = () => {
       if (res.status === 201) {
         console.log("Category created successfully!");
         // Update categories state with the newly created category
-        setCategories((prevCategories) => [...prevCategories, { name: newCat, slug: slug }]);
+        setCategories((prevCategories) => [
+          ...prevCategories,
+          { name: newCat, slug: slug },
+        ]);
         setCatSlug(slug); // Set the newly created category's slug as the selected category
         setNewCat(""); // Clear the input field
       } else {
@@ -174,7 +175,11 @@ const WritePage = () => {
         className={styles.selectNew}
         multiple
         value={selectedCategories}
-        onChange={(e) => setSelectedCategories(Array.from(e.target.selectedOptions, option => option.value))}
+        onChange={(e) =>
+          setSelectedCategories(
+            Array.from(e.target.selectedOptions, (option) => option.value)
+          )
+        }
       >
         {categories.map((category) => (
           <option key={category.slug} value={category.slug}>
