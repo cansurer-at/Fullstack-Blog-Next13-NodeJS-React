@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from 'next/dynamic';
 import Image from "next/image";
 import styles from "./writepage.module.css";
 import { useEffect, useState } from "react";
@@ -13,7 +14,9 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "../../utils/firebase";
-import ReactQuill from "react-quill";
+
+// Dynamically import ReactQuill to ensure it's only loaded on the client side
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const WritePage = () => {
   const { status } = useSession();
