@@ -29,10 +29,6 @@ const WritePage = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-
-
-
-
   useEffect(() => {
     // Fetch categories from your API
     const fetchCategories = async () => {
@@ -53,37 +49,39 @@ const WritePage = () => {
   }, []);
 
   useEffect(() => {
-    const storage = getStorage(app);
-    const upload = () => {
-      const name = new Date().getTime() + file.name;
-      const storageRef = ref(storage, name);
+    if (file) {
+      const storage = getStorage(app);
+      const upload = () => {
+        const name = new Date().getTime() + file.name;
+        const storageRef = ref(storage, name);
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {},
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setMedia(downloadURL);
+            });
           }
-        },
-        (error) => {},
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setMedia(downloadURL);
-          });
-        }
-      );
-    };
+        );
+      };
 
-    file && upload();
+      upload();
+    }
   }, [file]);
 
   if (status === "loading") {
@@ -91,7 +89,10 @@ const WritePage = () => {
   }
 
   if (status === "unauthenticated") {
-    router.push("/");
+    if (typeof window !== "undefined") {
+      router.push("/");
+    }
+    return null;
   }
 
   const slugify = (str) =>
@@ -102,55 +103,52 @@ const WritePage = () => {
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
 
-      const handleSubmit = async () => {
-        const res = await fetch("/api/posts", {
-          method: "POST",
-          body: JSON.stringify({
-            title,
-            desc: value,
-            img: media,
-            slug: slugify(title),
-            catSlugs: selectedCategories, // Use selectedCategories array
-          }),
-        });
-      
-        if (res.status === 200) {
-          const data = await res.json();
-          router.push(`/posts/${data.slug}`); // Update to use single post data
-        }
-      };
-      
+  const handleSubmit = async () => {
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        desc: value,
+        img: media,
+        slug: slugify(title),
+        catSlugs: selectedCategories, // Use selectedCategories array
+      }),
+    });
 
-      console.log('selectedCategories', selectedCategories)
+    if (res.status === 200) {
+      const data = await res.json();
+      router.push(`/posts/${data.slug}`); // Update to use single post data
+    }
+  };
 
-      const handleCreateCategory = async () => {
-        try {
-          // Generate slug from name
-          const slug = newCat.toLowerCase().replace(/\s+/g, "-");
-      
-          const res = await fetch("/api/categories", {
-            method: "POST",
-            body: JSON.stringify({
-              name: newCat,
-              slug: slug,
-            }),
-          });
-          if (res.status === 201) {
-            console.log("Category created successfully!");
-            // Update categories state with the newly created category
-            setCategories(prevCategories => [...prevCategories, { name: newCat, slug: slug }]);
-            setCatSlug(slug); // Set the newly created category's slug as the selected category
-            setNewCat(""); // Clear the input field
-          } else {
-            console.error("Failed to create category. Status:", res.status);
-            const data = await res.json();
-            console.error("Error message:", data.message);
-          }
-        } catch (error) {
-          console.error("Error creating category:", error);
-        }
-      };
-      
+  const handleCreateCategory = async () => {
+    try {
+      // Generate slug from name
+      const slug = newCat.toLowerCase().replace(/\s+/g, "-");
+
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        body: JSON.stringify({
+          name: newCat,
+          slug: slug,
+        }),
+      });
+      if (res.status === 201) {
+        console.log("Category created successfully!");
+        // Update categories state with the newly created category
+        setCategories((prevCategories) => [...prevCategories, { name: newCat, slug: slug }]);
+        setCatSlug(slug); // Set the newly created category's slug as the selected category
+        setNewCat(""); // Clear the input field
+      } else {
+        console.error("Failed to create category. Status:", res.status);
+        const data = await res.json();
+        console.error("Error message:", data.message);
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <input
@@ -170,17 +168,17 @@ const WritePage = () => {
         Create Category
       </button>
       <select
-  className={styles.selectNew}
-  multiple
-  value={selectedCategories}
-  onChange={(e) => setSelectedCategories(Array.from(e.target.selectedOptions, option => option.value))}
->
-  {categories.map((category) => (
-    <option key={category.slug} value={category.slug}>
-      {category.slug}
-    </option>
-  ))}
-</select>
+        className={styles.selectNew}
+        multiple
+        value={selectedCategories}
+        onChange={(e) => setSelectedCategories(Array.from(e.target.selectedOptions, option => option.value))}
+      >
+        {categories.map((category) => (
+          <option key={category.slug} value={category.slug}>
+            {category.slug}
+          </option>
+        ))}
+      </select>
 
       <div className={styles.editor}>
         <button className={styles.button} onClick={() => setOpen(!open)}>

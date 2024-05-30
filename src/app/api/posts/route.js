@@ -8,7 +8,7 @@ export const GET = async (req) => {
   const page = parseInt(searchParams.get("page") || "1");
   const cat = searchParams.get("cat");
 
-  const POST_PER_PAGE = 2;
+  const POST_PER_PAGE = 5;
 
   let query = {
     take: POST_PER_PAGE,

@@ -40,7 +40,7 @@ const ClientCardList = ({ initialData, page, cat }) => {
 
 
   const { posts, count } = data;
-  const POST_PER_PAGE = 2;
+  const POST_PER_PAGE = 5;
   const hasPrev = page > 1;
   const hasNext = page * POST_PER_PAGE < count;
 
