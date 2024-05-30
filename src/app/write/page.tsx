@@ -1,9 +1,11 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./writepage.module.css";
-import { useEffect, useState } from "react";
+import "react-quill/dist/quill.bubble.css";
+
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
@@ -13,21 +15,18 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "../../utils/firebase";
-
-// Dynamically import ReactQuill to ensure it's only loaded on the client side
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import ReactQuill from "react-quill";
 
 const WritePage = () => {
   const { status } = useSession();
   const router = useRouter();
-
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [media, setMedia] = useState("");
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [catSlug, setCatSlug] = useState("");
-  const [newCat, setNewCat] = useState(""); // State to hold new category name
+  const [newCat, setNewCat] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -51,47 +50,41 @@ const WritePage = () => {
   }, []);
 
   useEffect(() => {
-    const storage = getStorage(app);
-    const upload = () => {
-      const name = new Date().getTime() + file.name;
-      const storageRef = ref(storage, name);
+    if (file) {
+      const storage = getStorage(app);
+      const upload = () => {
+        const name = new Date().getTime() + file.name;
+        const storageRef = ref(storage, name);
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {},
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setMedia(downloadURL);
+            });
           }
-        },
-        (error) => {},
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setMedia(downloadURL);
-          });
-        }
-      );
-    };
+        );
+      };
 
-    upload();
+      upload();
+    }
   }, [file]);
-
-  if (status === "loading") {
-    return <div className={styles.loading}>Loading...</div>;
-  }
-
-  if (status === "unauthenticated") {
-    router.push("/");
-  }
 
   const slugify = (str) =>
     str
@@ -109,19 +102,18 @@ const WritePage = () => {
         desc: value,
         img: media,
         slug: slugify(title),
-        catSlugs: selectedCategories, // Use selectedCategories array
+        catSlugs: selectedCategories,
       }),
     });
 
     if (res.status === 200) {
       const data = await res.json();
-      router.push(`/posts/${data.slug}`); // Update to use single post data
+      router.push(`/posts/${data.slug}`);
     }
   };
 
   const handleCreateCategory = async () => {
     try {
-      // Generate slug from name
       const slug = newCat.toLowerCase().replace(/\s+/g, "-");
 
       const res = await fetch("/api/categories", {
@@ -133,13 +125,12 @@ const WritePage = () => {
       });
       if (res.status === 201) {
         console.log("Category created successfully!");
-        // Update categories state with the newly created category
         setCategories((prevCategories) => [
           ...prevCategories,
           { name: newCat, slug: slug },
         ]);
-        setCatSlug(slug); // Set the newly created category's slug as the selected category
-        setNewCat(""); // Clear the input field
+        setCatSlug(slug);
+        setNewCat("");
       } else {
         console.error("Failed to create category. Status:", res.status);
         const data = await res.json();
